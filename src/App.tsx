@@ -14,7 +14,7 @@ function App() {
         <h1 className="title">The Fierrett Sphere</h1>
         <div className="message-container">
           <IpPinger
-            ip="100.77.170.102"
+            ip="100.77.170.102:81"
             redirectUrl="https://sso.fierrettsphere.com/"
             timeoutMs={2500}
           />

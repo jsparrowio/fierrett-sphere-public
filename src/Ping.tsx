@@ -137,7 +137,12 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     setStatus("alive");
                     window.location.href = redirectUrl;
                     return;
-                } catch { }
+                } catch {
+                    if (!aborted.current) {
+                        setStep(`Not Connected`);
+                        setStatus("dead");
+                    }
+                }
 
                 // 3. Backend ping
                 try {
@@ -147,12 +152,14 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     setStatus("alive");
                     window.location.href = redirectUrl;
                     return;
-                } catch { }
-
-                if (!aborted.current) {
-                    setStep(`Not Connected`);
-                    setStatus("dead");
+                } catch {
+                    if (!aborted.current) {
+                        setStep(`Not Connected`);
+                        setStatus("dead");
+                    }
                 }
+
+
             } catch {
                 if (!aborted.current) setStatus("error");
             }
@@ -169,20 +176,20 @@ const IpPinger: React.FC<IpPingerProps> = ({
             {status === "probing" &&
                 <SpinningCircle />
             }
-            {status === "alive" &&
-                <>
-                    <p>Redirecting…</p>
-                    <button className="access-button" onClick={handleButtonClick}>
-                        Access Portal
-                    </button>
-                </>
-            }
             {status === "dead" &&
                 <>
                     <p className="message">
                         Hi, you've reached the landing page for the Fierrett Sphere! This is a private site that requires access to the Fierrett Sphere network. If you are seeing this page, you were not detected on the Fierrett Sphere network. If you believe you have reached this page in error, contact the administrator.
                     </p>
 
+                </>
+            }
+            {status === "alive" &&
+                <>
+                    <p>Redirecting…</p>
+                    <button className="access-button" onClick={handleButtonClick}>
+                        Access Portal
+                    </button>
                 </>
             }
             {status === "error" && <p>There was an error during the ping process.</p>}
