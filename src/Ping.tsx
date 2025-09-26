@@ -66,7 +66,7 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     reject(new Error("image error"));
                 };
 
-                img.src = `http://${ip}/favicon.ico?_=${Date.now()}`;
+                img.src = `${ip}/favicon.ico?_=${Date.now()}`;
             });
         };
 
@@ -81,7 +81,7 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     reject(new Error("fetch timeout"));
                 }, timeoutMs);
 
-                fetch(`http://${ip}/`, { method: "GET", mode: "no-cors", signal })
+                fetch(`ip`, { method: "GET", mode: "no-cors", signal })
                     .then(() => {
                         clearTimeout(timer);
                         resolve(true); // Opaque response = reachable
