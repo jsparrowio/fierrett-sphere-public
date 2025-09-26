@@ -38,37 +38,37 @@ const IpPinger: React.FC<IpPingerProps> = ({
         setStep(`Checking connection to the Fierrett Sphere...`);
 
         // --- IMAGE PROBE ---
-        const tryImage = (): Promise<boolean> => {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                let settled = false;
+        // const tryImage = (): Promise<boolean> => {
+        //     return new Promise((resolve, reject) => {
+        //         const img = new Image();
+        //         let settled = false;
 
-                const timer = setTimeout(() => {
-                    if (settled) return;
-                    settled = true;
-                    img.onload = img.onerror = null;
-                    reject(new Error("image timeout"));
-                }, timeoutMs);
+        //         const timer = setTimeout(() => {
+        //             if (settled) return;
+        //             settled = true;
+        //             img.onload = img.onerror = null;
+        //             reject(new Error("image timeout"));
+        //         }, timeoutMs);
 
-                img.onload = () => {
-                    if (settled) return;
-                    settled = true;
-                    clearTimeout(timer);
-                    img.onload = img.onerror = null;
-                    resolve(true);
-                };
+        //         img.onload = () => {
+        //             if (settled) return;
+        //             settled = true;
+        //             clearTimeout(timer);
+        //             img.onload = img.onerror = null;
+        //             resolve(true);
+        //         };
 
-                img.onerror = () => {
-                    if (settled) return;
-                    settled = true;
-                    clearTimeout(timer);
-                    img.onload = img.onerror = null;
-                    reject(new Error("image error"));
-                };
+        //         img.onerror = () => {
+        //             if (settled) return;
+        //             settled = true;
+        //             clearTimeout(timer);
+        //             img.onload = img.onerror = null;
+        //             reject(new Error("image error"));
+        //         };
 
-                img.src = `${ip}/favicon.ico?_=${Date.now()}`;
-            });
-        };
+        //         img.src = `${ip}/media/public/flow-backgrounds/fhsicon.png`;
+        //     });
+        // };
 
         // --- FETCH PROBE ---
         const tryFetch = (): Promise<boolean> => {
@@ -81,36 +81,31 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     reject(new Error("fetch timeout"));
                 }, timeoutMs);
 
-                fetch(`ip`, { method: "GET", mode: "no-cors", signal })
+                fetch(ip, { mode: "no-cors", signal })
                     .then(() => {
                         clearTimeout(timer);
-                        resolve(true); // Opaque response = reachable
+                        resolve(true);
                     })
-                    .catch((err) => {
-                        clearTimeout(timer);
-                        reject(err);
-                    });
+                    .catch(reject);
+
+
+
             });
         };
-
-        // --- BACKEND PING PROBE ---
 
         // --- RUN PROBES IN ORDER ---
         (async () => {
             try {
                 // 1. Image probe
-                try {
-                    await tryImage();
-                    if (aborted.current) return;
-                    setStatus("alive");
-                    setStep(`Connected!`);
-                    return;
-                } catch {
-                    if (!aborted.current) {
-                        setStep(`Not Connected`);
-                        setStatus("dead");
-                    }
-                }
+                // try {
+                //     await tryImage();
+                //     if (aborted.current) return;
+                //     setStatus("alive");
+                //     setStep(`Connected!`);
+                //     return;
+                // } catch {
+
+                // }
 
                 // 2. Fetch probe
                 try {
@@ -120,14 +115,13 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     setStatus("alive");
                     return;
                 } catch {
-                    if (!aborted.current) {
-                        setStep(`Not Connected`);
-                        setStatus("dead");
-                    }
+
                 }
 
-                // 3. Backend ping
-              
+                if (!aborted.current) {
+                    setStep(`Not Connected`);
+                    setStatus("dead");
+                }
 
             } catch {
                 if (!aborted.current) setStatus("error");
