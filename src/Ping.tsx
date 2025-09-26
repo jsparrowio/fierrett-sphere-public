@@ -126,7 +126,12 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     setStatus("alive");
                     setStep(`Connected!`);
                     return;
-                } catch { }
+                } catch {
+                    if (!aborted.current) {
+                        setStep(`Not Connected`);
+                        setStatus("dead");
+                    }
+                }
 
                 // 2. Fetch probe
                 try {
