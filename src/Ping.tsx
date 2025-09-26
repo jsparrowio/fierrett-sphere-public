@@ -94,27 +94,6 @@ const IpPinger: React.FC<IpPingerProps> = ({
         };
 
         // --- BACKEND PING PROBE ---
-        const tryBackend = (): Promise<boolean> => {
-            if (!backendPingUrl) return Promise.reject(new Error("No backend URL"));
-
-            return new Promise((resolve, reject) => {
-                const timer = setTimeout(() => {
-                    reject(new Error("backend timeout"));
-                }, timeoutMs);
-
-                fetch(`${backendPingUrl}${encodeURIComponent(ip)}`)
-                    .then((res) => res.json())
-                    .then((json: { alive?: boolean }) => {
-                        clearTimeout(timer);
-                        if (json && json.alive) resolve(true);
-                        else reject(new Error("Backend ping failed"));
-                    })
-                    .catch((err) => {
-                        clearTimeout(timer);
-                        reject(err);
-                    });
-            });
-        };
 
         // --- RUN PROBES IN ORDER ---
         (async () => {
@@ -148,19 +127,7 @@ const IpPinger: React.FC<IpPingerProps> = ({
                 }
 
                 // 3. Backend ping
-                try {
-                    await tryBackend();
-                    if (aborted.current) return;
-                    setStep(`Connected!`);
-                    setStatus("alive");
-                    return;
-                } catch {
-                    if (!aborted.current) {
-                        setStep(`Not Connected`);
-                        setStatus("dead");
-                    }
-                }
-
+              
 
             } catch {
                 if (!aborted.current) setStatus("error");
