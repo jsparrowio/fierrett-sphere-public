@@ -16,7 +16,7 @@ interface IpPingerProps {
 type PingStatus = "idle" | "probing" | "alive" | "dead" | "error";
 
 const handleButtonClick = () => {
-    window.location.href = 'https://sso.fierrettsphere.com';
+    window.open('https://sso.fierrettsphere.com', '_blank');
 };
 
 const IpPinger: React.FC<IpPingerProps> = ({
@@ -125,7 +125,6 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     if (aborted.current) return;
                     setStatus("alive");
                     setStep(`Connected!`);
-                    window.location.href = redirectUrl;
                     return;
                 } catch { }
 
@@ -135,7 +134,6 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     if (aborted.current) return;
                     setStep(`Connected!`);
                     setStatus("alive");
-                    window.location.href = redirectUrl;
                     return;
                 } catch {
                     if (!aborted.current) {
@@ -150,7 +148,6 @@ const IpPinger: React.FC<IpPingerProps> = ({
                     if (aborted.current) return;
                     setStep(`Connected!`);
                     setStatus("alive");
-                    window.location.href = redirectUrl;
                     return;
                 } catch {
                     if (!aborted.current) {
@@ -186,7 +183,7 @@ const IpPinger: React.FC<IpPingerProps> = ({
             }
             {status === "alive" &&
                 <>
-                    <p>Redirecting…</p>
+                    <p>You are connected to the Fierrett Sphere!</p>
                     <button className="access-button" onClick={handleButtonClick}>
                         Access Portal
                     </button>
