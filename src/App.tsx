@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <div className="landing-container">
-        <img src={fhsicon} style={{ 'height': '150px', 'width': '150px' }}></img>
+        <img src={fhsicon} style={{ 'height': '150px', 'width': '150px' }} alt="fierrettspherelogo"></img>
         <h1 className="title">The Fierrett Sphere</h1>
         <div className="message-container">
           <p className="message">
