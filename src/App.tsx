@@ -1,7 +1,5 @@
-import React from 'react';
 import './App.css';
 import fhsicon from './fhsicon.png';
-import IpPinger from './Ping';
 
 function App() {
 
